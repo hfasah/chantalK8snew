@@ -1,0 +1,28 @@
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: hpa-name
+  namespace: your-namespace
+  annotations:
+    metric-config.external.prometheus-query.prometheus/interval: 30s
+    metric-config.external.prometheus-query.prometheus/prometheus-server: http://your-prometheus-server-ip
+    metric-config.external.prometheus-query.prometheus/istio-requests-total: |
+      sum(rate(istio_requests_total{reporter="destination", destination_workload="deployment-name", destination_service_namespace="your-namespace"}[2m]))
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: deployment-name
+  minReplicas: 1
+  maxReplicas: 10
+  metrics:
+  - type: External
+    external:
+      metric:
+        name: prometheus-query
+        selector:
+          matchLabels:
+            query-name: istio-requests-total
+      target:
+        type: AverageValue
+        averageValue: 7
