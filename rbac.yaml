@@ -1,0 +1,15 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: deployment-role
+  labels:
+    rbac.example.com/deployment-role: "true"
+# development team should not be able to run certain commands
+# on your k8s cluster,but you want them to be able to deploy and roll back.,
+# the rules below will be added to the "deployment" ClusterRole.
+rules:
+- apiGroups: ["apps"]
+  # at the HTTP level, the name of the resource for accessing Deployment
+  # objects is "deployments"
+  resources: ["deployments"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
