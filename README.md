@@ -15,6 +15,17 @@ vim autoscale.yaml
 vim redis.yaml 
 
 
+kubectl -n test describe deployment app-1 | grep -i image
+kubectl -n test describe deployment app-1 | grep  image
+kubectl -n test describe deployment app-1 | grep -i image
+kubectl -n test set image deployment/app-1  redis=5.0.1
+kubectl -n test describe deployment app-1 | grep -i image
+kubectl -n test rollout history app-1
+kubectl -n test rollout history deployment app-1
+kubectl -n test set image deployment/app-1  redis=latest
+kubectl -n test describe deployment app-1 | grep -i image
+kubectl rollout status deployment/app-1  -n test
+
 
 DevOps Take Home Exercise
 Thank you for your interest in 7shifts. We appreciate your dedication for this take home
